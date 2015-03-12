@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -76,7 +77,16 @@ int main()
 
     }
     else  // sinon
-            cerr << "Impossible d'ouvrir le fichier d'input' !" << endl;
+            cerr << "Impossible d'ouvrir le fichier !" << endl;
+
+    sort(serveurAAllouer.begin(), serveurAAllouer.end(), triPerformance);
     return 0;
 }
+
+bool triPerformance(Serveur* i, Serveur* j)
+{
+    return (i->c/i->t) < (j->c/j->t)
+}
+
+
 
