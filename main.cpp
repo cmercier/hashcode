@@ -30,7 +30,7 @@ bool grille[MAX_INT][MAX_INT];
 
 bool read_input_file (string filename) {
     FILE *f = NULL;
-    f = fopen(filename, "r+");
+    f = fopen(filename.c_str(), "r+");
     bool success = false;
     if (f) {
         success = true;
@@ -58,16 +58,16 @@ bool read_input_file (string filename) {
 
 bool print_output_file (string filename) {
     FILE *f = NULL;
-    f = fopen(filename, "w+");
+    f = fopen(filename.c_str(), "w+");
     bool success = false;
     if (f) {
         success = true;
         for (int i = 0; i < serveurAAllouer.size(); i++) {
             Serveur *s = serveurAAllouer[i];
             if (1) {
-                fprintf(outputFile, "%d %d %d\n", 0, 0, 0);
+                fprintf(f, "%d %d %d\n", 0, 0, 0);
             } else {
-                fprintf(outputFile, "x\n");
+                fprintf(f, "x\n");
             }
         }
         fclose(f);
@@ -75,13 +75,16 @@ bool print_output_file (string filename) {
     return success;
 }
 
-void init_vars () {
-    read_input_file("dc.in");
-    for (int i = 0; i < R; i++) {
-        for (int j = 0; j < S; j++) {
-            grille[i][j] = false;
+bool init_vars () {
+    if (read_input_file("dc.in")) {
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < S; j++) {
+                grille[i][j] = false;
+            }
         }
+        return true;
     }
+    return false;
 }
 
 bool triPerformance(Serveur* i, Serveur* j)
@@ -91,40 +94,7 @@ bool triPerformance(Serveur* i, Serveur* j)
 
 int main()
 {
-    init_vars();
-    print_output_file("dc.txt");
-
-    FILE *f = NULL;
-    f = fopen("dc.in", "r+");
-
-    if(f)  // si l'ouverture a réussi
-    {
-        fscanf(f, "%d %d %d %d %d\n", &R, &S, &U, &P, &M);
-
-        int count = 0;
-        while (count < U)
-        {
-            Emplacement *e = new Emplacement();
-            fscanf(f, "%d %d\n", &(e->r), &(e->c));
-            emplIndisponibles.push_back(e);
-
-            //cout << e->r << "-" << e->c << endl;
-            grille[e->r][e->c] = true;
-            count++;
-        }
-
-        count = 0;
-        while (count < M)
-        {
-            Serveur *s = new Serveur();
-            fscanf(f, "%d %d\n", &(s->t), &(s->c));
-            serveurAAllouer.push_back(s);
-
-            //cout << s->t << "-" << s->c << endl;
-            count++;
-        }
-        fclose(f);  // on ferme le fichier
-
+    if (init_vars()) {
         for(int i = 0; i < serveurAAllouer.size(); i++)
         {
             serveurTrie.push_back(serveurAAllouer[i]);
@@ -136,31 +106,7 @@ int main()
         {
             cout << serveurTrie[i]->t << "-" << serveurTrie[i]->c << endl;
         }
-
-
-        FILE *outputFile = NULL;
-        outputFile = fopen("dc.txt", "w+");
-
-        if (outputFile) {
-            for (int i = 0; i < serveurAAllouer.size(); i++) {
-                Serveur *s = serveurAAllouer[i];
-                if (1) {
-                    fprintf(outputFile, "%d %d %d\n", 0, 0, 0);
-                } else {
-                    fprintf(outputFile, "x\n");
-                }
-            }
-            fclose(outputFile);  // on ferme le fichier
-        }
-        else
-            cerr << "Impossible d'ouvrir le fichier d'output' !" << endl;
-
-
-
-
+        print_output_file("dc.txt");
     }
-    else  // sinon
-            cerr << "Impossible d'ouvrir le fichier !" << endl;
-
     return 0;
 }
