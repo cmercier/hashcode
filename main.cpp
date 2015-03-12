@@ -25,8 +25,16 @@ typedef struct serveur {
 vector<Emplacement*> emplIndisponibles;
 vector<Serveur*> serveurTrie;
 vector<Serveur*> serveurAAllouer;
+int parcoursGroup = 0;
 
 bool grille[MAX_INT][MAX_INT];
+
+int getGroup()
+{
+    if (parcoursGroup >= P)
+        parcoursGroup = 0;
+    return parcoursGroup++;
+}
 
 bool read_input_file (string filename) {
     FILE *f = NULL;
@@ -65,7 +73,7 @@ bool print_output_file (string filename) {
         for (int i = 0; i < serveurAAllouer.size(); i++) {
             Serveur *s = serveurAAllouer[i];
             if (1) {
-                fprintf(f, "%d %d %d\n", 0, 0, 0);
+                fprintf(f, "%d %d %d\n", s->row, s->column, s->group);
             } else {
                 fprintf(f, "x\n");
             }
@@ -92,6 +100,40 @@ bool triPerformance(Serveur* i, Serveur* j)
     return (i->c/i->t) > (j->c/j->t);
 }
 
+bool testTaille(int row, int column, int taille)
+{
+    for(int i = column; i + taille < S && i < column + taille; i++)
+    {
+        if (grille[row][i] == true)
+           return false;
+    }
+    return false;
+}
+
+bool addToRangee(int rangee,int index)
+{
+    Serveur* serveur = serveurTrie[index];
+    int taille = serveur->t;
+    for(int i = 0; i < S; i++)
+    {
+        if (grille[rangee][i] == false){
+            if(testTaille(rangee, i, taille))
+            {
+                serveur->row = rangee;
+                serveur->column = i;
+                serveur->group = getGroup();
+                serveurTrie.erase(serveurTrie.begin() + index);
+                for(int j = 0; j < taille; j++)
+                {
+                    grille[rangee][j] = true;
+                }
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 int main()
 {
     if (init_vars()) {
@@ -106,6 +148,16 @@ int main()
         {
             cout << serveurTrie[i]->t << "-" << serveurTrie[i]->c << endl;
         }
+
+        for(int i = 0; i < R; i++)
+        {
+            int indexServeur = 0;
+            while (addToRangee(i, indexServeur) == false && indexServeur < serveurTrie.size())
+            {
+                indexServeur++;
+            }
+        }
+
         print_output_file("dc.txt");
     }
     return 0;
