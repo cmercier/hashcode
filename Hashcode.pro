@@ -9,5 +9,6 @@ include(deployment.pri)
 qtcAddDeployment()
 
 DISTFILES += \
+OTHER_FILES += \
     dc.in
 
