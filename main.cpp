@@ -18,52 +18,40 @@ typedef struct serveur {
     int t, c; // taille & capacite
 } Serveur;
 
-vector<Emplacement> emplIndisponibles;
-vector<Serveur> serveurAAllouer;
+vector<Emplacement*> emplIndisponibles;
+vector<Serveur*> serveurAAllouer;
 
 int main()
 {
-    ifstream fichier("dc.in", ios::in);  // on ouvre le fichier en lecture
+    FILE *f = NULL;
+    f = fopen("dc.in", "r+");
 
-    if(fichier)  // si l'ouverture a réussi
+    if(f)  // si l'ouverture a réussi
     {
-        string contenu;
-        fichier >> R >> S >> U >> P >> M;
-        getline(fichier, contenu);  // on avance
+        fscanf(f, "%d %d %d %d %d\n", &R, &S, &U, &P, &M);
 
         int count = 0;
         while (count < U)
         {
-            string substring;
-            istringstream* streamLine = new istringstream(contenu);
-            getline(*streamLine, substring, ' ');
-            Emplacement* emp = new Emplacement();
-            emp->r = substring;
-            getline(*streamLine, substring, ' ');
-            emp->c = substring;
-            emplIndisponibles.push_back(*emp);
+            Emplacement *e = new Emplacement();
+            fscanf(f, "%d %d\n", &(e->r), &(e->c));
+            emplIndisponibles.push_back(e);
 
-            getline(fichier, contenu);  // on met dans "contenu" la ligne
+            cout << e->r << "-" << e->c << endl;
             count++;
         }
 
         count = 0;
         while (count < M)
         {
-            string substring;
-            istringstream* streamLine = new istringstream(contenu);
-            getline(*streamLine, substring, ' ');
-            Serveur* emp = new Serveur();
-            emp->t = substring;
-            getline(*streamLine, substring, ' ');
-            emp->c = substring;
-            emplIndisponibles.push_back(*emp);
+            Serveur *s = new Serveur();
+            fscanf(f, "%d %d\n", &(s->t), &(s->c));
+            serveurAAllouer.push_back(s);
 
-            getline(fichier, contenu);  // on met dans "contenu" la ligne
+            cout << s->t << "-" << s->c << endl;
             count++;
         }
-
-        fichier.close();  // on ferme le fichier
+        fclose(f);  // on ferme le fichier
     }
     else  // sinon
             cerr << "Impossible d'ouvrir le fichier !" << endl;
