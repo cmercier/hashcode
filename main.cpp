@@ -15,7 +15,8 @@ typedef struct emplacement {
 } Emplacement;
 
 typedef struct serveur {
-    int t, c; // taille & capacite
+    int t, c, row, column, group;// taille & capacite
+    // rangee 1000 equivaut à x
 } Serveur;
 
 vector<Emplacement*> emplIndisponibles;
