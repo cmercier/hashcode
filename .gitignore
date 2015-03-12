@@ -4,6 +4,9 @@
 *.o
 *.obj
 
+# Qt User-specific Files
+*.user
+
 # Precompiled Headers
 *.gch
 *.pch
