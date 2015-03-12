@@ -27,13 +27,48 @@ int main()
 
     if(fichier)  // si l'ouverture a réussi
     {
-        // instructions
-            fichier.close();  // on ferme le fichier
+        string contenu;
+        fichier >> R >> S >> U >> P >> M;
+        getline(fichier, contenu);  // on avance
+
+        int count = 0;
+        while (count < U)
+        {
+            string substring;
+            istringstream* streamLine = new istringstream(contenu);
+            getline(*streamLine, substring, ' ');
+            Emplacement* emp = new Emplacement();
+            emp->r = substring;
+            getline(*streamLine, substring, ' ');
+            emp->c = substring;
+            emplIndisponibles.push_back(*emp);
+
+            getline(fichier, contenu);  // on met dans "contenu" la ligne
+            count++;
+        }
+
+        count = 0;
+        while (count < M)
+        {
+            string substring;
+            istringstream* streamLine = new istringstream(contenu);
+            getline(*streamLine, substring, ' ');
+            Serveur* emp = new Serveur();
+            emp->t = substring;
+            getline(*streamLine, substring, ' ');
+            emp->c = substring;
+            emplIndisponibles.push_back(*emp);
+
+            getline(fichier, contenu);  // on met dans "contenu" la ligne
+            count++;
+        }
+
+        fichier.close();  // on ferme le fichier
     }
     else  // sinon
             cerr << "Impossible d'ouvrir le fichier !" << endl;
 
-    cout << "Hello World!" << endl;
+    cout << M << endl;
     return 0;
 }
 
