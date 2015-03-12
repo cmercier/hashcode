@@ -44,7 +44,7 @@ bool read_input_file (string filename) {
 
             //cout << e->r << "-" << e->c << endl;
         }
-        for (int i = 0; i < U; i++) {
+        for (int i = 0; i < M; i++) {
             Serveur *s = new Serveur();
             fscanf(f, "%d %d\n", &(s->t), &(s->c));
             serveurAAllouer.push_back(s);
