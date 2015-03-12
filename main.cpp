@@ -3,6 +3,8 @@
 #include <fstream>
 #include <algorithm>
 
+#define MAX_INT 1000
+
 using namespace std;
 
 int R, // Nb de rangees du centre
@@ -22,6 +24,16 @@ typedef struct serveur {
 
 vector<Emplacement*> emplIndisponibles;
 vector<Serveur*> serveurAAllouer;
+
+bool grille[MAX_INT][MAX_INT];
+
+void init () {
+    for (int i = 0; i < R; i++) {
+        for (int j = 0; j < S; j++) {
+            grille[i][j] = false;
+        }
+    }
+}
 
 bool triPerformance(Serveur* i, Serveur* j)
 {
@@ -43,6 +55,8 @@ int main()
             Emplacement *e = new Emplacement();
             fscanf(f, "%d %d\n", &(e->r), &(e->c));
             emplIndisponibles.push_back(e);
+
+            grille[e->r][e->c] = true;
 
             cout << e->r << "-" << e->c << endl;
             count++;
