@@ -23,6 +23,11 @@ typedef struct serveur {
 vector<Emplacement*> emplIndisponibles;
 vector<Serveur*> serveurAAllouer;
 
+bool triPerformance(Serveur* i, Serveur* j)
+{
+    return (i->c/i->t) < (j->c/j->t);
+}
+
 int main()
 {
     FILE *f = NULL;
@@ -82,11 +87,3 @@ int main()
     sort(serveurAAllouer.begin(), serveurAAllouer.end(), triPerformance);
     return 0;
 }
-
-bool triPerformance(Serveur* i, Serveur* j)
-{
-    return (i->c/i->t) < (j->c/j->t)
-}
-
-
-
