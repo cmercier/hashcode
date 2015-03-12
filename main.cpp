@@ -107,7 +107,7 @@ bool testTaille(int row, int column, int taille)
         if (grille[row][i] == true)
            return false;
     }
-    return false;
+    return true;
 }
 
 bool addToRangee(int rangee,int index)
@@ -125,7 +125,7 @@ bool addToRangee(int rangee,int index)
                 serveurTrie.erase(serveurTrie.begin() + index);
                 for(int j = 0; j < taille; j++)
                 {
-                    grille[rangee][j] = true;
+                    grille[rangee][i + j] = true;
                 }
                 return true;
             }
@@ -149,13 +149,26 @@ int main()
             cout << serveurTrie[i]->t << "-" << serveurTrie[i]->c << endl;
         }
 
-        for(int i = 0; i < R; i++)
-        {
-            int indexServeur = 0;
-            while (addToRangee(i, indexServeur) == false && indexServeur < serveurTrie.size())
+        for (int k = 0; k < R; k++) {
+            for(int i = 0; i < R; i++)
             {
-                indexServeur++;
+                int indexServeur = 0;
+                while (addToRangee(i, indexServeur) == false && indexServeur < serveurTrie.size())
+                {
+                    indexServeur++;
+                }
+                cout << serveurTrie.size()<< endl;
             }
+        }
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < S; j++) {
+                if (grille[i][j] == true) {
+                    cout << "1 ";
+                } else {
+                    cout << "0 ";
+                }
+            }
+            cout << endl;
         }
 
         print_output_file("dc.txt");
