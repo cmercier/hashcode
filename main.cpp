@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    ifstream fichier("dc.txt", ios::in);  // on ouvre le fichier en lecture
+    ifstream fichier("dc.in", ios::in);  // on ouvre le fichier en lecture
 
     if(fichier)  // si l'ouverture a réussi
     {
