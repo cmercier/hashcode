@@ -23,6 +23,7 @@ typedef struct serveur {
 } Serveur;
 
 vector<Emplacement*> emplIndisponibles;
+vector<Serveur*> serveurTrie;
 vector<Serveur*> serveurAAllouer;
 
 bool grille[MAX_INT][MAX_INT];
@@ -85,7 +86,7 @@ void init_vars () {
 
 bool triPerformance(Serveur* i, Serveur* j)
 {
-    return (i->c/i->t) < (j->c/j->t);
+    return (i->c/i->t) > (j->c/j->t);
 }
 
 int main()
@@ -107,9 +108,8 @@ int main()
             fscanf(f, "%d %d\n", &(e->r), &(e->c));
             emplIndisponibles.push_back(e);
 
+            //cout << e->r << "-" << e->c << endl;
             grille[e->r][e->c] = true;
-
-            cout << e->r << "-" << e->c << endl;
             count++;
         }
 
@@ -120,10 +120,23 @@ int main()
             fscanf(f, "%d %d\n", &(s->t), &(s->c));
             serveurAAllouer.push_back(s);
 
-            cout << s->t << "-" << s->c << endl;
+            //cout << s->t << "-" << s->c << endl;
             count++;
         }
         fclose(f);  // on ferme le fichier
+
+        for(int i = 0; i < serveurAAllouer.size(); i++)
+        {
+            serveurTrie.push_back(serveurAAllouer[i]);
+        }
+
+        sort(serveurTrie.begin(), serveurTrie.end(), triPerformance);
+
+        for(int i = 0; i < serveurTrie.size(); i++)
+        {
+            cout << serveurTrie[i]->t << "-" << serveurTrie[i]->c << endl;
+        }
+
 
         FILE *outputFile = NULL;
         outputFile = fopen("dc.txt", "w+");
@@ -149,6 +162,5 @@ int main()
     else  // sinon
             cerr << "Impossible d'ouvrir le fichier !" << endl;
 
-    sort(serveurAAllouer.begin(), serveurAAllouer.end(), triPerformance);
     return 0;
 }
