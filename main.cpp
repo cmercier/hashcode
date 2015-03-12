@@ -52,11 +52,30 @@ int main()
             count++;
         }
         fclose(f);  // on ferme le fichier
+
+        FILE *outputFile = NULL;
+        outputFile = fopen("dc.txt", "w+");
+
+        if (outputFile) {
+            for (int i = 0; i < serveurAAllouer.size(); i++) {
+                Serveur *s = serveurAAllouer[i];
+                if (1) {
+                    fprintf(outputFile, "%d %d %d\n", 0, 0, 0);
+                } else {
+                    fprintf(outputFile, "x\n");
+                }
+            }
+            fclose(outputFile);  // on ferme le fichier
+        }
+        else
+            cerr << "Impossible d'ouvrir le fichier d'output' !" << endl;
+
+
+
+
     }
     else  // sinon
-            cerr << "Impossible d'ouvrir le fichier !" << endl;
-
-    cout << M << endl;
+            cerr << "Impossible d'ouvrir le fichier d'input' !" << endl;
     return 0;
 }
 
