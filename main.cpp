@@ -29,6 +29,19 @@ int parcoursGroup = 0;
 
 bool grille[MAX_INT][MAX_INT];
 
+void display_grid () {
+    for (int i = 0; i < R; i++) {
+        for (int j = 0; j < S; j++) {
+            if (grille[i][j] == true) {
+                cout << "1 ";
+            } else {
+                cout << "0 ";
+            }
+        }
+        cout << endl;
+    }
+}
+
 int getGroup()
 {
     if (parcoursGroup >= P)
@@ -58,7 +71,7 @@ bool read_input_file (string filename) {
             fscanf(f, "%d %d\n", &(s->t), &(s->c));
             serveurAAllouer.push_back(s);
 
-            //cout << s->t << "-" << s->c << endl;
+//            cout << s->t << "-" << s->c << endl;
         }
         fclose(f);
     }
@@ -103,9 +116,9 @@ bool triPerformance(Serveur* i, Serveur* j)
 
 bool testTaille(int row, int column, int taille)
 {
-    for(int i = column; i + taille < S && i < column + taille; i++)
+    for(int i = column; i < column + taille; i++)
     {
-        if (grille[row][i] == true)
+        if (i >= S || grille[row][i] == true)
            return false;
     }
     return true;
@@ -120,33 +133,27 @@ bool addToRangee(int rangee,int index)
         if (grille[rangee][i] == false){
             if(testTaille(rangee, i, taille))
             {
+//                if (serveurAAllouer[53] == serveurTrie[index]) {
+//                    display_grid();
+//                    cout << "ADDTORANGEE " << rangee << " " << i << " " << taille << endl;
+//                }
                 serveur->row = rangee;
                 serveur->column = i;
                 serveur->group = getGroup();
                 serveur->used = true;
-                serveurTrie.erase(serveurTrie.begin() + index);
                 for(int j = 0; j < taille; j++)
                 {
                     grille[rangee][i + j] = true;
                 }
+//                if (serveurAAllouer[53] == serveurTrie[index]) {
+//                    display_grid();
+//                }
+                serveurTrie.erase(serveurTrie.begin() + index);
                 return true;
             }
         }
     }
     return false;
-}
-
-void display_grid () {
-    for (int i = 0; i < R; i++) {
-        for (int j = 0; j < S; j++) {
-            if (grille[i][j] == true) {
-                cout << "1 ";
-            } else {
-                cout << "0 ";
-            }
-        }
-        cout << endl;
-    }
 }
 
 int main()
@@ -161,10 +168,10 @@ int main()
 
         for(int i = 0; i < serveurTrie.size(); i++)
         {
-            cout << serveurTrie[i]->t << "-" << serveurTrie[i]->c << endl;
+//            cout << serveurTrie[i]->t << "-" << serveurTrie[i]->c << endl;
         }
 
-        for (int k = 0; k < R; k++) {
+        for (int k = 0; k < S; k++) {
             for(int i = 0; i < R; i++)
             {
                 int indexServeur = 0;
@@ -172,7 +179,7 @@ int main()
                 {
                     indexServeur++;
                 }
-                cout << serveurTrie.size()<< endl;
+//                cout << serveurTrie.size()<< endl;
             }
         }
 
