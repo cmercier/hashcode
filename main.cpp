@@ -54,6 +54,7 @@ bool read_input_file (string filename) {
         }
         for (int i = 0; i < M; i++) {
             Serveur *s = new Serveur();
+            s->used = false;
             fscanf(f, "%d %d\n", &(s->t), &(s->c));
             serveurAAllouer.push_back(s);
 
@@ -72,7 +73,7 @@ bool print_output_file (string filename) {
         success = true;
         for (int i = 0; i < serveurAAllouer.size(); i++) {
             Serveur *s = serveurAAllouer[i];
-            if (1) {
+            if (s->used) {
                 fprintf(f, "%d %d %d\n", s->row, s->column, s->group);
             } else {
                 fprintf(f, "x\n");
@@ -84,12 +85,12 @@ bool print_output_file (string filename) {
 }
 
 bool init_vars () {
-    if (read_input_file("dc.in")) {
-        for (int i = 0; i < R; i++) {
-            for (int j = 0; j < S; j++) {
-                grille[i][j] = false;
-            }
+    for (int i = 0; i < R; i++) {
+        for (int j = 0; j < S; j++) {
+            grille[i][j] = false;
         }
+    }
+    if (read_input_file("dc.in")) {
         return true;
     }
     return false;
@@ -122,6 +123,7 @@ bool addToRangee(int rangee,int index)
                 serveur->row = rangee;
                 serveur->column = i;
                 serveur->group = getGroup();
+                serveur->used = true;
                 serveurTrie.erase(serveurTrie.begin() + index);
                 for(int j = 0; j < taille; j++)
                 {
@@ -132,6 +134,19 @@ bool addToRangee(int rangee,int index)
         }
     }
     return false;
+}
+
+void display_grid () {
+    for (int i = 0; i < R; i++) {
+        for (int j = 0; j < S; j++) {
+            if (grille[i][j] == true) {
+                cout << "1 ";
+            } else {
+                cout << "0 ";
+            }
+        }
+        cout << endl;
+    }
 }
 
 int main()
@@ -160,16 +175,8 @@ int main()
                 cout << serveurTrie.size()<< endl;
             }
         }
-        for (int i = 0; i < R; i++) {
-            for (int j = 0; j < S; j++) {
-                if (grille[i][j] == true) {
-                    cout << "1 ";
-                } else {
-                    cout << "0 ";
-                }
-            }
-            cout << endl;
-        }
+
+        display_grid();
 
         print_output_file("dc.txt");
     }
